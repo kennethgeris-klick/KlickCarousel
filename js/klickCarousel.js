@@ -300,7 +300,7 @@ var KlickCarousel = function () {
 
       // Create frame and apply styling
       this.sliderFrame = document.createElement('div');
-      
+      this.sliderFrame.classList.add('KlickSliderFrame');
       this.sliderFrame.style.width = widthItem * itemsToBuild + 'px';
       this.enableTransition();
       

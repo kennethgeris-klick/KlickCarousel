@@ -60,6 +60,10 @@ body {
     right: 0px;
 }
 
+.KlickCarousel .KlickSliderFrame {
+    display: flex;
+    align-items: center;
+}
 
 /*INDICATOR*/
 .CarouselIndicator{
