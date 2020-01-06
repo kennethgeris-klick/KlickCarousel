@@ -1,0 +1,68 @@
+body {
+    background-color: #3d3d3d
+}
+
+/*CAROUSEL*/
+.KlickCarousel {
+    max-width: 1140px;
+    margin: 0 auto;
+    position: relative;
+}
+
+.KlickCarousel .KlickSlider{
+      text-align: center;
+      color: white;
+      max-width: 1028px;
+      margin: 0 auto;
+}
+
+.testimonialSlider p:last-of-type, .supportSlider a{
+    color: #f7ec00
+}
+/*ARROWS*/
+.KlickButtons {
+    position: absolute;
+    width: 56px;
+    height: 56px;
+    top: 50%;
+    transform: translateY(-50%);
+    border-radius: 50%;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    background: url('../img/carousel-arrow.png') no-repeat center;
+    border: 2px solid #dedede
+}
+.KlickButtons:hover {
+    background-color: #8a8a8a;
+}
+.KlickPrev{
+    transform: translateY(-50%) rotate(180deg) ;
+    left: 0px;
+}
+.KlickNext{
+    right: 0px;
+}
+
+
+/*INDICATOR*/
+.CarouselIndicator{
+    margin: 25px auto 0px auto;
+    text-align: center;
+
+}
+.CarouselIndicatorBullet {
+    outline: none;
+    cursor: pointer;
+    border-radius: 50%;
+    border: 1px solid #f7ec00;
+    width: 20px;
+    height: 20px;
+    background-color: transparent;
+    margin: 0 5px;
+}
+
+.CarouselIndicatorBullet.active{
+    background-color: #f7ec00;
+    transition: background-color 250ms ease-out;
+}
