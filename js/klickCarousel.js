@@ -894,3 +894,29 @@ module.exports = exports['default'];
 });
 
 
+var myCarousel;
+new KlickCarousel({
+  selector: '.testimonialSlider',
+  duration: 500,
+});
+
+function donationSlider(){
+  if(window.innerWidth > 1024){
+    myCarousel.destroy(true);
+    myCarousel.selector.classList.add('desktop')
+    
+  }else{
+    myCarousel.init();
+    myCarousel.selector.classList.remove('desktop')
+  }
+}
+window.addEventListener("resize", donationSlider);
+window.addEventListener("DOMContentLoaded", function() {
+  myCarousel = new KlickCarousel({
+    selector: '.supportSlider',
+    duration: 500
+  });
+
+  donationSlider()
+  
+});

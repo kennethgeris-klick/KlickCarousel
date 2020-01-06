@@ -36,34 +36,9 @@
                       <p>The Association of Migraine Disorders is on a mission to increase public understanding of migraine and its full effects. They provide podcasts, symposiums, awareness campaigns, and research to promote this cause.</p>
                       <a href="#" target="_blank">Get Involved</a>
                     </div>
+                    
                 </div>
         </div>
     <script src="js/klickCarousel.js"></script>
-    <script>
-    var myCarousel;
-    new KlickCarousel({
-      selector: '.testimonialSlider',
-      duration: 500,
-    });
-
-    function donationSlider(){
-      if(window.innerWidth > 1024){
-        myCarousel.destroy(true);
-      }else{
-        myCarousel.init();
-      }
-    }
-    window.addEventListener("resize", donationSlider);
-    window.addEventListener("DOMContentLoaded", function() {
-      myCarousel = new KlickCarousel({
-        selector: '.supportSlider',
-        duration: 500
-      });
-
-      donationSlider()
-      
-    });
-
-</script>
   </body>
 </html>

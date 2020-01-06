@@ -23,6 +23,7 @@ body {
 }
 
 
+
 .testimonialSlider p:last-of-type, .supportSlider a{
     color: #f7ec00
 }
@@ -84,6 +85,9 @@ body {
 
 
 /*SUPPORT SLIDER*/
+.supportSlider.desktop {
+    display: flex;
+}
 @media screen and (min-width: 1024px){
     .supportSlider ~ .CarouselIndicator{
         display: none;
