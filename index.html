@@ -40,16 +40,30 @@
         </div>
     <script src="js/klickCarousel.js"></script>
     <script>
+    var myCarousel;
     new KlickCarousel({
       selector: '.testimonialSlider',
       duration: 500,
     });
 
-    new KlickCarousel({
-      selector: '.supportSlider',
-      duration: 500,
-       disable: 1024
+    function donationSlider(){
+      if(window.innerWidth > 1024){
+        myCarousel.destroy(true);
+      }else{
+        myCarousel.init();
+      }
+    }
+    window.addEventListener("resize", donationSlider);
+    window.addEventListener("DOMContentLoaded", function() {
+      myCarousel = new KlickCarousel({
+        selector: '.supportSlider',
+        duration: 500
+      });
+
+      donationSlider()
+      
     });
+
 </script>
   </body>
 </html>

@@ -130,9 +130,9 @@ var KlickCarousel = function () {
 
     // Build markup and apply required styling to elements
 
-    
     this.init();
-
+ 
+    
   }
 
   /**
@@ -214,11 +214,10 @@ var KlickCarousel = function () {
           this.buildArrows();
       }
 
-      if(this.config.disable >= 0 || (window.innerWidth < this.config.disable)){
+      if(this.config.dots){
         this.buildPagination();
         this.updatePagination();
       }
-
 
       document.onkeydown = function(e) {
         e = e || window.event;
@@ -256,10 +255,8 @@ var KlickCarousel = function () {
         }
 
         // add the container full of dots after selector
-        this.selector.parentNode.insertBefore(this.dots, this.selector.nextSibling);
-        
+        this.selector.parentNode.replaceChild(this.dots, this.selector.nextSibling);       
 
-      
     }
   }, {
     key: 'updatePagination',
@@ -280,10 +277,10 @@ var KlickCarousel = function () {
         var next = document.createElement('button');
         next.classList.add('KlickButtons', 'KlickNext')
 
-        if (this.config.disable == 0 || (window.innerWidth < this.config.disable)){
+        
           this.selector.appendChild(prev)
           this.selector.appendChild(next)
-        }
+        
 
         
         var _this =  this;
@@ -339,14 +336,7 @@ var KlickCarousel = function () {
       var elementContainer = document.createElement('div');
       
         elementContainer.classList.add('KlickSlide');
-        if((window.innerWidth > this.config.disable) && this.config.disable !=0){
-          //document.querySelector('.supportSlider').style.width = 'auto'
-        }else{
-
-        }
-
         elementContainer.style.width = (this.config.loop ? 100 / (this.innerElements.length + this.perPage * 2) : 100 / this.innerElements.length) + '%';
-
 
       elementContainer.appendChild(elm);
       return elementContainer;
@@ -582,8 +572,6 @@ var KlickCarousel = function () {
       
         this.buildSliderFrame();
         this.buildArrows();
-      
-
 
     }
 
@@ -846,6 +834,8 @@ var KlickCarousel = function () {
         this.selector.innerHTML = '';
         this.selector.appendChild(slides);
         this.selector.removeAttribute('style');
+        
+        
       }
 
       if (callback) {
@@ -902,3 +892,5 @@ module.exports = exports['default'];
 /***/ })
 /******/ ]);
 });
+
+
