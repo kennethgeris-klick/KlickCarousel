@@ -124,14 +124,15 @@ var KlickCarousel = function () {
     this.transformProperty = KlickCarousel.webkitOrNot();
 
     // Bind all event handlers for referencability
-    ['resizeHandler', 'touchstartHandler', 'touchendHandler', 'touchmoveHandler', 'mousedownHandler', 'mouseupHandler', 'mouseleaveHandler', 'mousemoveHandler', 'clickHandler'].forEach(function (method) {
+    ['resizeHandler', 'touchstartHandler', 'touchendHandler', 'touchmoveHandler', 'mousedownHandler', 'mouseupHandler', 'mouseleaveHandler', 'clickHandler'].forEach(function (method) {
       _this[method] = _this[method].bind(_this);
     });
 
     // Build markup and apply required styling to elements
-    this.init();
-      
+
     
+    this.init();
+
   }
 
   /**
@@ -173,7 +174,6 @@ var KlickCarousel = function () {
         this.selector.addEventListener('mousedown', this.mousedownHandler);
         this.selector.addEventListener('mouseup', this.mouseupHandler);
         this.selector.addEventListener('mouseleave', this.mouseleaveHandler);
-        this.selector.addEventListener('mousemove', this.mousemoveHandler);
 
         // Click
         this.selector.addEventListener('click', this.clickHandler);
@@ -195,7 +195,6 @@ var KlickCarousel = function () {
       this.selector.removeEventListener('mousedown', this.mousedownHandler);
       this.selector.removeEventListener('mouseup', this.mouseupHandler);
       this.selector.removeEventListener('mouseleave', this.mouseleaveHandler);
-      this.selector.removeEventListener('mousemove', this.mousemoveHandler);
       this.selector.removeEventListener('click', this.clickHandler);
     }
 
@@ -209,39 +208,31 @@ var KlickCarousel = function () {
       var  _this = this;
       this.attachEvents();
 
-      // hide everything out of selector's boundaries
-      this.selector.style.overflow = 'hidden';
-
       // build a frame and slide to a currentSlide
       this.buildSliderFrame();
       if(this.config.arrows){
           this.buildArrows();
       }
 
-      if(this.config.dots){
+      if(this.config.disable >= 0 || (window.innerWidth < this.config.disable)){
         this.buildPagination();
         this.updatePagination();
       }
 
+
       document.onkeydown = function(e) {
         e = e || window.event;
         if (e.keyCode == '37') {
-            _this.prev()
+            _this.prevSlide()
         } else if (e.keyCode == '39') {
-            // right -> show next image
-            _this.next()
+            _this.nextSlide()
         }
+      }
     }
-    }
-
-    /**
-     * Build a sliderFrame and slide to a current item.
-     */
 
   }, {
     key: 'buildPagination',
     value: function buildPagination() {
-      
         // create a contnier for all dots
         // add a class 'dots' for styling reason
         this.dots = document.createElement('div');
@@ -266,17 +257,19 @@ var KlickCarousel = function () {
 
         // add the container full of dots after selector
         this.selector.parentNode.insertBefore(this.dots, this.selector.nextSibling);
+        
+
       
     }
   }, {
     key: 'updatePagination',
     value: function() {
         // loop through all dots
-        for(let i = 0; i < this.dots.querySelectorAll('button').length; i++) {
-          // if current dot matches currentSlide prop, add a class to it, remove otherwise
-          const addOrRemove = this.currentSlide === i ? 'add' : 'remove';
-          this.dots.querySelectorAll('button')[i].classList[addOrRemove]('active');
-        }
+          for(let i = 0; i < this.dots.querySelectorAll('button').length; i++) {
+            // if current dot matches currentSlide prop, add a class to it, remove otherwise
+            const addOrRemove = this.currentSlide === i ? 'add' : 'remove';
+            this.dots.querySelectorAll('button')[i].classList[addOrRemove]('active');
+          }
     }
   }, {
     key: 'buildArrows',
@@ -287,16 +280,19 @@ var KlickCarousel = function () {
         var next = document.createElement('button');
         next.classList.add('KlickButtons', 'KlickNext')
 
-        this.selector.appendChild(prev)
-        this.selector.appendChild(next)
+        if (this.config.disable == 0 || (window.innerWidth < this.config.disable)){
+          this.selector.appendChild(prev)
+          this.selector.appendChild(next)
+        }
+
         
         var _this =  this;
 
         prev.addEventListener('click', function() {
-            _this.prev();
+            _this.prevSlide();
         });
         next.addEventListener('click', function () {
-            _this.next();
+            _this.nextSlide();
         });
     }
   }, {
@@ -307,13 +303,10 @@ var KlickCarousel = function () {
 
       // Create frame and apply styling
       this.sliderFrame = document.createElement('div');
+      
       this.sliderFrame.style.width = widthItem * itemsToBuild + 'px';
       this.enableTransition();
-
-      if (this.config.draggable) {
-        this.selector.style.cursor = '-webkit-grab';
-      }
-
+      
       // Create a document fragment to put slides into it
       var docFragment = document.createDocumentFragment();
 
@@ -328,12 +321,7 @@ var KlickCarousel = function () {
         var _element = this.buildSliderFrameItem(this.innerElements[_i]);
         docFragment.appendChild(_element);
       }
-      if (this.config.loop) {
-        for (var _i2 = 0; _i2 < this.perPage; _i2++) {
-          var _element2 = this.buildSliderFrameItem(this.innerElements[_i2].cloneNode(true));
-          docFragment.appendChild(_element2);
-        }
-      }
+
 
       // Add fragment to the frame
       this.sliderFrame.appendChild(docFragment);
@@ -350,10 +338,16 @@ var KlickCarousel = function () {
     value: function buildSliderFrameItem(elm) {
       var elementContainer = document.createElement('div');
       
-        elementContainer.style.cssFloat = 'left';
-        elementContainer.style.float ='left';
+        elementContainer.classList.add('KlickSlide');
+        if((window.innerWidth > this.config.disable) && this.config.disable !=0){
+          //document.querySelector('.supportSlider').style.width = 'auto'
+        }else{
+
+        }
+
         elementContainer.style.width = (this.config.loop ? 100 / (this.innerElements.length + this.perPage * 2) : 100 / this.innerElements.length) + '%';
-      
+
+
       elementContainer.appendChild(elm);
       return elementContainer;
     }
@@ -384,8 +378,8 @@ var KlickCarousel = function () {
      */
 
   }, {
-    key: 'prev',
-    value: function prev() {
+    key: 'prevSlide',
+    value: function prevSlide() {
       var howManySlides = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
       var callback = arguments[1];
 
@@ -432,8 +426,8 @@ var KlickCarousel = function () {
      */
 
   }, {
-    key: 'next',
-    value: function next() {
+    key: 'nextSlide',
+    value: function nextSlide() {
       var howManySlides = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
       var callback = arguments[1];
 
@@ -503,7 +497,6 @@ var KlickCarousel = function () {
   }, {
     key: 'goTo',
     value: function goTo(index, callback) {
-      console.log('trugger');
       if (this.innerElements.length <= this.perPage) {
         return;
       }
@@ -559,9 +552,9 @@ var KlickCarousel = function () {
       var slideToPositiveClone = movement < 0 && this.currentSlide + howManySliderToSlide > this.innerElements.length - this.perPage;
 
       if (movement > 0 && this.innerElements.length > this.perPage) {
-        this.prev(howManySliderToSlide);
+        this.prevSlide(howManySliderToSlide);
       } else if (movement < 0 && this.innerElements.length > this.perPage) {
-        this.next(howManySliderToSlide);
+        this.nextSlide(howManySliderToSlide);
       }
       this.slideToCurrent(slideToNegativeClone || slideToPositiveClone);
     }
@@ -576,7 +569,6 @@ var KlickCarousel = function () {
       // update perPage number dependable of user value
       this.resolveSlidesNumber();
 
-
       // relcalculate currentSlide
       // prevent hiding items when browser width increases
       if (this.currentSlide + this.perPage > this.innerElements.length) {
@@ -585,11 +577,14 @@ var KlickCarousel = function () {
 
       this.selectorWidth = this.selector.offsetWidth;
 
-      this.buildSliderFrame();
-      this.buildArrows();
-    
+
+
       
-      //check for disable value when to disable the carousel feature
+        this.buildSliderFrame();
+        this.buildArrows();
+      
+
+
     }
 
     /**
@@ -698,7 +693,6 @@ var KlickCarousel = function () {
     value: function mouseupHandler(e) {
       e.stopPropagation();
       this.pointerDown = false;
-      this.selector.style.cursor = '-webkit-grab';
       this.enableTransition();
       if (this.drag.endX) {
         this.updateAfterDrag();
@@ -706,45 +700,11 @@ var KlickCarousel = function () {
       this.clearDrag();
     }
 
-    /**
-     * mousemove event handler
-     */
-
-  }, {
-    key: 'mousemoveHandler',
-    value: function mousemoveHandler(e) {
-      e.preventDefault();
-      if (this.pointerDown) {
-        // if dragged element is a link
-        // mark preventClick prop as a true
-        // to detemine about browser redirection later on
-        if (e.target.nodeName === 'A') {
-          this.drag.preventClick = true;
-        }
-
-        this.drag.endX = e.pageX;
-        this.selector.style.cursor = '-webkit-grabbing';
-        this.sliderFrame.style.webkitTransition = 'all 0ms ' + this.config.easing;
-        this.sliderFrame.style.transition = 'all 0ms ' + this.config.easing;
-
-        var currentSlide = this.config.loop ? this.currentSlide + this.perPage : this.currentSlide;
-        var currentOffset = currentSlide * (this.selectorWidth / this.perPage);
-        var dragOffset = this.drag.endX - this.drag.startX;
-        var offset = this.config.rtl ? currentOffset + dragOffset : currentOffset - dragOffset;
-        this.sliderFrame.style[this.transformProperty] = 'translate3d(' + (-1 * offset) + 'px, 0, 0)';
-      }
-    }
-
-    /**
-     * mouseleave event handler
-     */
-
   }, {
     key: 'mouseleaveHandler',
     value: function mouseleaveHandler(e) {
       if (this.pointerDown) {
         this.pointerDown = false;
-        this.selector.style.cursor = '-webkit-grab';
         this.drag.endX = e.pageX;
         this.drag.preventClick = false;
         this.enableTransition();
@@ -941,16 +901,4 @@ module.exports = exports['default'];
 
 /***/ })
 /******/ ]);
-});
-
-new KlickCarousel({
-    selector: '.testimonialSlider',
-    duration: 500,
-    
-});
-
-new KlickCarousel({
-    selector: '.supportSlider',
-    duration: 500,
-    disable: 1024
 });

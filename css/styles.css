@@ -14,7 +14,14 @@ body {
       color: white;
       max-width: 1028px;
       margin: 0 auto;
+      overflow: hidden; 
+      overflow: hidden;
 }
+.KlickCarousel .KlickSlide {
+    float: left;
+    width: 25%;
+}
+
 
 .testimonialSlider p:last-of-type, .supportSlider a{
     color: #f7ec00
@@ -31,8 +38,16 @@ body {
     outline: none;
     cursor: pointer;
     background: url('../img/carousel-arrow.png') no-repeat center;
-    border: 2px solid #dedede
+    background-size: 9px 18px;
+    border: 1px solid #dedede
 }
+@media screen and (min-width: 1024px){
+    .KlickButtons {
+        width: 37px;
+        height: 37px;
+    }
+}
+
 .KlickButtons:hover {
     background-color: #8a8a8a;
 }
@@ -65,4 +80,12 @@ body {
 .CarouselIndicatorBullet.active{
     background-color: #f7ec00;
     transition: background-color 250ms ease-out;
+}
+
+
+/*SUPPORT SLIDER*/
+@media screen and (min-width: 1024px){
+    .supportSlider ~ .CarouselIndicator{
+        display: none;
+    }
 }
