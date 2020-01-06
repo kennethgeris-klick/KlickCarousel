@@ -901,7 +901,7 @@ new KlickCarousel({
 });
 
 function donationSlider(){
-  if(window.innerWidth > 1024){
+  if(window.innerWidth >= 1024){
     myCarousel.destroy(true);
     myCarousel.selector.classList.add('desktop')
     
